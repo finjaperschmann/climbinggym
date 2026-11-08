@@ -1,0 +1,30 @@
+# Projekt für den Synology Container Manager.
+# Der Spielcode ist dieser Ordner (der Git-Checkout) und wird nach /app gehängt.
+# Spieler und Chat liegen in einer SQLite-Datei unter dem Datenpfad, außerhalb des Checkouts.
+
+services:
+  boulderhalle:
+    image: axelperschmann/boulderhalle:latest
+    restart: unless-stopped
+    init: true
+    ports:
+      - "8787:8080"
+    environment:
+      PORT: "8080"
+      DATA_DIR: /data
+    volumes:
+      - ./:/app
+      - /volume1/docker/boulderhalle-data:/data
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:8080/api/health').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 120s
+    stop_grace_period: 10s

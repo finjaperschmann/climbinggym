@@ -2,6 +2,9 @@
   "name": "climbingsimulator",
   "private": true,
   "type": "module",
+  "scripts": {
+    "start": "node server.mjs"
+  },
   "dependencies": {
     "@netlify/database": "^2.0.2",
     "@netlify/functions": "^6.1.0",
